@@ -73,12 +73,16 @@ func (c secretCreator) createSecretInput(name, description, kmskey string, isBin
 	klog.Infof("Using kms key: %s for encryption", kmskey)
 	input.KmsKeyId = aws.String(kmskey)
 
+	if len(secret.Data) == 0 {
+		return nil, errors.New("no data in requested secret")
+	}
+
 	if isBinary {
 		if len(secret.Data) > 1 {
 			return nil, errors.New("too many binary values in secret")
 		}
 		for _, value := range secret.Data {
-			input.SecretBinary = []byte(value)
+			input.SecretBinary = value
 		}
 	} else {
 		var decodedData map[string]string = make(map[string]string)
@@ -95,7 +99,7 @@ func (c secretCreator) createSecretInput(name, description, kmskey string, isBin
 	return input, nil
 }
 
-func (c secretCreator) createAWSSecret(input *secretsmanager.CreateSecretInput, name string) error {
+func (c secretCreator) createAWSSecret(input *secretsmanager.CreateSecretInput) error {
 	if c.dryRun {
 		output, err := json.Marshal(&input)
 		if err != nil {

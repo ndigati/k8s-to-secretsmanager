@@ -122,7 +122,7 @@ go version: %s
 		klog.Fatalf("Failed to create secret input: %v", err)
 	}
 
-	err = awsClient.createAWSSecret(input, secretName)
+	err = awsClient.createAWSSecret(input)
 	if err != nil {
 		klog.Fatalf("Failed to create secretsmanager secret: %v", err)
 	}

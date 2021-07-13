@@ -97,7 +97,7 @@ func TestCreateSecretInput(t *testing.T) {
 	expected2.Name = aws.String("eks/test/default/my-secret")
 	expected2.Description = aws.String("Test secret binary")
 	expected2.KmsKeyId = aws.String("fake-arn")
-	expected2.SecretBinary = []byte("dmFsdWUx")
+	expected2.SecretBinary = []byte("value1")
 
 	expected3 := &secretsmanager.CreateSecretInput{}
 
@@ -118,7 +118,7 @@ func TestCreateSecretInput(t *testing.T) {
 
 	c := secretCreator{
 		region:  "us-east-1",
-		profile: "default",
+		profile: "doesnotexist",
 
 		kmsClient: &MockListKeys{},
 		smClient:  &MockCreateSecret{},
@@ -128,7 +128,7 @@ func TestCreateSecretInput(t *testing.T) {
 		result, err := c.createSecretInput(table.name, table.description, table.kmsKey, table.isBinary, table.secret, table.tags)
 		if err == nil && table.expectedError == nil {
 			if !compareCreateSecretInputs(table.expected, result) {
-				t.Errorf("Resulting secret input does not match, expected: %#v, got: %#v", table.expected, result)
+				t.Errorf("Resulting secret input does not match:\nexpected: %#v\n \ngot: %#v", table.expected, result)
 			}
 		}
 		// Should probably have a custom error type but this works for now
