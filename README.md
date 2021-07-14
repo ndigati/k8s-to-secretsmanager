@@ -2,7 +2,19 @@
 
 Takes a Kubernetes secret and imports it into AWS Secrets Manager for easy migration to [kubernetes-external-secrets](https://github.com/external-secrets/kubernetes-external-secrets)
 
+## Why?
+
+I mostly created this to play with client-go and the AWS v2 go sdk. It also makes it a little easier to migrate secrets from the built in kubernetes secrets to secretsmanager without having to write a long-ish bash pipeline or storing `-o yaml` files on my laptop.
+
 ## Usage
+
+### Prerequistes 
+
+- A working kubeconfig for access to a kubernetes cluster
+- AWS credentials (either through a named profile or static keys)
+- A KMS key arn to encrypt the uploaded secrets with
+
+---
 
 ```console
 Usage of k8s-to-secretsmanager:
@@ -19,3 +31,9 @@ Usage of k8s-to-secretsmanager:
       --tags stringToString   list of key=value pairs to use for tags for secretsmanager secret (separated by comma) (default [uploaded:by=k8s-to-secretsmanager])
   -v, --version               Print version info
 ```
+
+## Building
+
+Build requires a working Go toolchain (Only tested with go 1.16+). There's a [Makefile](./Makefile) to run common build and testing commands.
+
+To get a working binary for your platform/OS you can just run `make` and it will place the binary in the repo's `build/` directory.
