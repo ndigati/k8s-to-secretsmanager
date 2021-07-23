@@ -109,6 +109,8 @@ go version: %s
 		os.Exit(1)
 	}
 
+	tags = mergeTags(defaultTags, tags)
+
 	secret, err := getK8sSecret(secretName, secretNamespace)
 	if err != nil {
 		klog.Fatalf("Failed to get secret %s from kubernetes: %s", secretName, err)
