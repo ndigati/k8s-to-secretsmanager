@@ -10,6 +10,8 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/klog/v2"
 
+	_ "k8s.io/client-go/plugin/pkg/client/auth/oidc"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	flag "github.com/spf13/pflag"
